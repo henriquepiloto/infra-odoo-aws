@@ -1,4 +1,4 @@
-name: Deploy Odoo on EC2
+name: Deploy Odoo via CodeBuild + SSM
 
 on:
   push:
@@ -7,19 +7,22 @@ on:
 
 jobs:
   deploy:
-    name: Deploy via SSH
-    runs-on: ubuntu-latest
+    runs-on: codebuild-odoo-deploy-${{ github.run_id }}-${{ github.run_attempt }}
 
     steps:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Deploy na EC2 via SSH
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd infra-odoo-aws
-            ./deploy.sh
+      - name: Deploy via SSM para EC2 privada
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --instance-ids "i-0b5cb111f39d1f22a" \
+            --comment "Deploy do Odoo" \
+            --parameters 'commands=[
+              "cd /home/ubuntu/infra-odoo",
+              "git pull",
+              "docker compose down",
+              "docker compose up -d"
+            ]' \
+            --region us-east-1
