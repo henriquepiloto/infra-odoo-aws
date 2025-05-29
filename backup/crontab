@@ -1,0 +1,1 @@
+0 3 * * * /home/ubuntu/infra-odoo-aws/backup/backup.sh >> /var/log/odoo_backup.log 2>&1

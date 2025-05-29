@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 20
+  build:
+    commands:
+      - echo "Starting deploy to EC2 via SSM"
+      - aws ssm send-command \
+          --document-name "AWS-RunShellScript" \
+          --comment "Deploy Odoo via Docker Compose" \
+          --instance-ids "i-0b5cb111f39d1f22a" \ # <- Substitua pelo ID da sua EC2
+          --parameters 'commands=[
+              "cd /home/ubuntu/infra-odoo",
+              "git pull",
+              "docker compose down",
+              "docker compose up -d"
+          ]' \
+          --region us-east-1
