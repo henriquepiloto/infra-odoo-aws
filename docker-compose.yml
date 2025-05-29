@@ -6,12 +6,20 @@ services:
     container_name: odoo16
     ports:
       - "8069:8069"
+    # Comando com configuração personalizada e interface pública
     command: ["odoo", "-c", "/etc/odoo/odoo.conf", "--dev=reload", "--xmlrpc-interface=0.0.0.0"]
+    
+    # Arquivo de variáveis de ambiente
     env_file:
       - .env
+
     volumes:
+      # Volume persistente para os dados da aplicação
       - odoo-data:/var/lib/odoo
+
+      # Arquivo de configuração do Odoo com parâmetros do banco
       - ./config/odoo.conf:/etc/odoo/odoo.conf
+
     restart: unless-stopped
 
 volumes:
