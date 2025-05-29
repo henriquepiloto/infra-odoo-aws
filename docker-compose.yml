@@ -6,6 +6,7 @@ services:
     container_name: odoo16
     ports:
       - "8069:8069"
+    command: ["odoo", "--dev=reload", "--xmlrpc-interface=0.0.0.0"]
     environment:
       - HOST=${DB_HOST}
       - USER=${DB_USER}
