@@ -1,7 +1,7 @@
 version: 0.2
 
 phases:
-    build:
+  build:
     commands:
       - echo "Enviando comando para EC2 via SSM"
       - aws ssm send-command \
