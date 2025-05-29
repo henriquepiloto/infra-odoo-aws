@@ -6,13 +6,12 @@ services:
     container_name: odoo16
     ports:
       - "8069:8069"
-    command: ["odoo", "--dev=reload", "--xmlrpc-interface=0.0.0.0"]
-    environment:
-      - HOST=${DB_HOST}
-      - USER=${DB_USER}
-      - PASSWORD=${DB_PASSWORD}
+    command: ["odoo", "-c", "/etc/odoo/odoo.conf", "--dev=reload", "--xmlrpc-interface=0.0.0.0"]
+    env_file:
+      - .env
     volumes:
       - odoo-data:/var/lib/odoo
+      - ./config/odoo.conf:/etc/odoo/odoo.conf
     restart: unless-stopped
 
 volumes:
