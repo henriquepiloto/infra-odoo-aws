@@ -1,10 +1,7 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      docker: 20
-  build:
+    build:
     commands:
       - echo "Enviando comando para EC2 via SSM"
       - aws ssm send-command \
